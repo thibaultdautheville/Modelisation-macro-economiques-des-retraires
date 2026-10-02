@@ -32,3 +32,60 @@ class ScenarioConfig(BaseModel):
             raise ValueError("aod_target_months must be positive")
 
         return self
+
+from datetime import date
+
+
+class BaselineConfig(BaseModel):
+    baseline_id: str
+    label: str
+
+    anchor_year: int
+    simulation_start_year: int
+    simulation_end_year: int
+
+    legal_freeze_target_date: date
+    legal_freeze_status: str
+
+    demography_source_id: str
+    macro_source_id: str
+    retirement_source_id: str
+
+    long_term_unemployment_rate: float = Field(
+        ge=0.0,
+        le=1.0,
+    )
+
+    relative_productivity: float = Field(
+        ge=0.0,
+    )
+
+    public_receipts_gdp_ratio: float = Field(
+        ge=0.0,
+        le=1.0,
+    )
+
+    monthly_birth_cohort_split: str
+
+    interpolate_official_benchmarks: bool = False
+
+    @model_validator(mode="after")
+    def validate_baseline(self):
+        if self.anchor_year >= self.simulation_start_year:
+            raise ValueError(
+                "anchor_year must precede simulation_start_year"
+            )
+
+        if self.simulation_start_year > self.simulation_end_year:
+            raise ValueError(
+                "simulation_start_year must be <= simulation_end_year"
+            )
+
+        if self.monthly_birth_cohort_split != "uniform_1_12":
+            raise ValueError(
+                "Unsupported monthly birth cohort split"
+            )
+
+        return self
+
+    

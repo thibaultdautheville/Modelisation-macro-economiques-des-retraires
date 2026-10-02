@@ -1,0 +1,25 @@
+version: 1
+
+baseline:
+  baseline_id: statu_quo_2026
+  label: "Statu quo 2026 - législation inchangée"
+
+  anchor_year: 2025
+  simulation_start_year: 2026
+  simulation_end_year: 2070
+
+  legal_freeze_target_date: "2026-12-31"
+  legal_freeze_status: "provisional"
+
+  demography_source_id: INSEE_DEMOG2026
+  macro_source_id: COR_RA2026_P1
+  retirement_source_id: COR_RA2026_P2
+
+  long_term_unemployment_rate: 0.07
+  relative_productivity: 1.0
+
+  public_receipts_gdp_ratio: 0.53
+
+  monthly_birth_cohort_split: "uniform_1_12"
+
+  interpolate_official_benchmarks: false

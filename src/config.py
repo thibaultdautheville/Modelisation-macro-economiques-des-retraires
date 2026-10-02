@@ -5,6 +5,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 CONFIG_DIR = ROOT / "config"
 SCENARIOS_PATH = CONFIG_DIR / "scenarios.yaml"
+BASELINE_PATH = CONFIG_DIR / "baseline.yaml"
 
 MASTER_PATH = Path(
     os.getenv(
