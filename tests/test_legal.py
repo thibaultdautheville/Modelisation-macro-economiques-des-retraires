@@ -57,13 +57,57 @@ def test_uniform_shift_from_first_cohort_with_cap():
     assert df.loc[1, "aod_months"] == 768
 
 
-def test_progressive_pace_not_implemented_yet():
+def test_progressive_pace_by_generation():
+    df = pd.DataFrame(
+        {
+            "birth_year": [
+                1964,
+                1965,
+                1965,
+                1966,
+                1967,
+                1968,
+                1969,
+            ],
+            "birth_month": [
+                12,
+                6,
+                7,
+                1,
+                1,
+                1,
+                1,
+            ],
+            "aod_months": [768] * 7,
+            "aod_years": [64.0] * 7,
+            "dar_quarters": [172] * 7,
+            "aad_months": [804] * 7,
+            "aad_years": [67.0] * 7,
+        }
+    )
+
     scenario = ScenarioConfig(
         scenario_id="progressive",
         label="Progressive",
-        aod_shift_months=12,
+        aod_target_months=780,
+        first_affected_birth_year=1965,
+        first_affected_birth_month=7,
         pace_months_per_generation=3,
     )
 
-    with pytest.raises(NotImplementedError):
-        apply_aod_scenario(sample_calendar(), scenario)
+    result = apply_aod_scenario(
+        df,
+        scenario,
+    )
+
+    assert result["delta_aod_months"].tolist() == [
+        0,
+        0,
+        3,
+        6,
+        9,
+        12,
+        12,
+    ]
+
+    assert result["aod_months_reform"].max() == 780

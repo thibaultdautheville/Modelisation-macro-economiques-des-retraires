@@ -67,11 +67,6 @@ def apply_aod_scenario(
 ) -> pd.DataFrame:
     validate_legal_calendar(df)
 
-    if scenario.pace_months_per_generation not in (None, 0):
-        raise NotImplementedError(
-            "Progressive cohort pace is not implemented yet"
-        )
-
     out = df.copy()
 
     out["aod_months_baseline"] = out["aod_months"].astype(int)
@@ -93,13 +88,35 @@ def apply_aod_scenario(
 
         affected = cohort >= threshold
 
-    shifted = out["aod_months_baseline"] + scenario.aod_shift_months
+    if scenario.pace_months_per_generation not in (None, 0):
+        if scenario.first_affected_birth_year is None:
+            raise ValueError(
+                "first_affected_birth_year is required for progressive pace"
+            )
+
+        shift = progressive_aod_shift(
+            out["birth_year"],
+            scenario.first_affected_birth_year,
+            scenario.pace_months_per_generation,
+        )
+    else:
+        shift = scenario.aod_shift_months
+
+    shifted = out["aod_months_baseline"] + shift
 
     if scenario.aod_target_months is not None:
-        if scenario.aod_shift_months >= 0:
-            shifted = shifted.clip(upper=scenario.aod_target_months)
+        if scenario.pace_months_per_generation not in (None, 0):
+            shifted = shifted.clip(
+                upper=scenario.aod_target_months
+            )
+        elif scenario.aod_shift_months >= 0:
+            shifted = shifted.clip(
+                upper=scenario.aod_target_months
+            )
         else:
-            shifted = shifted.clip(lower=scenario.aod_target_months)
+            shifted = shifted.clip(
+                lower=scenario.aod_target_months
+            )
 
     out.loc[affected, "aod_months_reform"] = shifted.loc[affected]
 
@@ -110,3 +127,18 @@ def apply_aod_scenario(
     out["aod_years_reform"] = out["aod_months_reform"] / 12
 
     return out
+
+
+def progressive_aod_shift(
+    birth_year: pd.Series,
+    first_birth_year: int,
+    pace_months_per_generation: int,
+) -> pd.Series:
+    """Additional AOD months by birth generation."""
+    step = (
+        birth_year.astype(int)
+        - first_birth_year
+        + 1
+    ).clip(lower=0)
+
+    return step * pace_months_per_generation
