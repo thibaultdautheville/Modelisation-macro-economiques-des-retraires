@@ -5,7 +5,9 @@ application:
   baseline: "Scénario de référence"
   reform: "Scénario réformé"
   difference: "Écart à la référence"
+  modelled: "Modélisé"
 
+  
 metrics:
   labour_force: "Population active"
   employment: "Emploi"
@@ -16,6 +18,11 @@ metrics:
   delta_labour_force: "Effet sur la population active"
   delta_employment: "Effet sur l'emploi"
   delta_unemployment: "Effet sur le chômage"
+
+  activity_rate: "Taux d'activité"
+  baseline_activity_rate: "Taux d'activité de référence"
+  labour_force_baseline: "Population active de référence"
+
 
 units:
   persons: "personnes"
