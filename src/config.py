@@ -3,6 +3,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+CONFIG_DIR = ROOT / "config"
+SCENARIOS_PATH = CONFIG_DIR / "scenarios.yaml"
+
 MASTER_PATH = Path(
     os.getenv(
         "MASTER_FILE",

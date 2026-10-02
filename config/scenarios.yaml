@@ -1,0 +1,196 @@
+version: 1
+
+default_scenario: statu_quo
+
+scenarios:
+
+  statu_quo:
+    metadata:
+      status: implemented
+      runnable: true
+      role: baseline
+      description: >
+        Scénario de référence. Législation inchangée par rapport
+        au calendrier légal contenu dans LEGAL_AOD_DAR.
+
+    parameters:
+      scenario_id: statu_quo
+      label: "Statu quo 2026 - législation inchangée"
+
+      aod_shift_months: 0
+      aod_target_months: null
+
+      first_affected_birth_year: null
+      first_affected_birth_month: 1
+      pace_months_per_generation: null
+
+      pivot_age_months: null
+      behavioural_delay_share: 1.0
+
+      life_expectancy_indexation: false
+      lambda_ev: 0.6666666667
+
+      long_term_unemployment_rate: 0.07
+      absorption_rate: 1.0
+      relative_productivity: 1.0
+
+
+  benchmark_aod_plus_1:
+    metadata:
+      status: implemented
+      runnable: true
+      role: institutional_benchmark
+      description: >
+        Benchmark technique de relèvement uniforme de douze mois
+        de l'âge d'ouverture des droits. Utilisé pour la validation
+        du moteur par comparaison avec les résultats institutionnels.
+      source: "DG Trésor / COR 2026"
+      calibration_only: true
+
+    parameters:
+      scenario_id: benchmark_aod_plus_1
+      label: "Benchmark institutionnel - AOD +1 an"
+
+      aod_shift_months: 12
+      aod_target_months: null
+
+      first_affected_birth_year: null
+      first_affected_birth_month: 1
+      pace_months_per_generation: null
+
+      pivot_age_months: null
+      behavioural_delay_share: 1.0
+
+      life_expectancy_indexation: false
+      lambda_ev: 0.6666666667
+
+      long_term_unemployment_rate: 0.07
+      absorption_rate: 1.0
+      relative_productivity: 1.0
+
+
+  medef_option_1:
+    metadata:
+      status: to_calibrate
+      runnable: false
+      role: medef_scenario
+      description: >
+        Option MEDEF 1. Les paramètres d'âge pivot,
+        décote, surcote et comportement doivent être
+        verrouillés avant activation.
+
+    parameters:
+      scenario_id: medef_option_1
+      label: "MEDEF - Option 1"
+
+      aod_shift_months: 0
+      aod_target_months: null
+
+      first_affected_birth_year: null
+      first_affected_birth_month: 1
+      pace_months_per_generation: null
+
+      pivot_age_months: null
+      behavioural_delay_share: 1.0
+
+      life_expectancy_indexation: false
+      lambda_ev: 0.6666666667
+
+      long_term_unemployment_rate: 0.07
+      absorption_rate: 1.0
+      relative_productivity: 1.0
+
+
+  medef_option_2:
+    metadata:
+      status: to_calibrate
+      runnable: false
+      role: medef_scenario
+      description: >
+        Option MEDEF 2. Le calendrier exact par cohorte
+        et le rythme de montée en charge doivent être
+        verrouillés avant activation.
+
+    parameters:
+      scenario_id: medef_option_2
+      label: "MEDEF - Option 2"
+
+      aod_shift_months: 0
+      aod_target_months: null
+
+      first_affected_birth_year: null
+      first_affected_birth_month: 1
+      pace_months_per_generation: null
+
+      pivot_age_months: null
+      behavioural_delay_share: 1.0
+
+      life_expectancy_indexation: false
+      lambda_ev: 0.6666666667
+
+      long_term_unemployment_rate: 0.07
+      absorption_rate: 1.0
+      relative_productivity: 1.0
+
+
+  medef_option_3:
+    metadata:
+      status: to_calibrate
+      runnable: false
+      role: medef_scenario
+      description: >
+        Option MEDEF 3. Le calendrier exact d'AOD et,
+        le cas échéant, l'indexation sur l'espérance de vie
+        doivent être verrouillés avant activation.
+
+    parameters:
+      scenario_id: medef_option_3
+      label: "MEDEF - Option 3"
+
+      aod_shift_months: 0
+      aod_target_months: null
+
+      first_affected_birth_year: null
+      first_affected_birth_month: 1
+      pace_months_per_generation: null
+
+      pivot_age_months: null
+      behavioural_delay_share: 1.0
+
+      life_expectancy_indexation: false
+      lambda_ev: 0.6666666667
+
+      long_term_unemployment_rate: 0.07
+      absorption_rate: 1.0
+      relative_productivity: 1.0
+
+
+  custom:
+    metadata:
+      status: user_defined
+      runnable: true
+      role: custom
+      description: >
+        Scénario libre destiné à être alimenté par
+        les paramètres définis dans l'interface utilisateur.
+
+    parameters:
+      scenario_id: custom
+      label: "Scénario personnalisé"
+
+      aod_shift_months: 0
+      aod_target_months: null
+
+      first_affected_birth_year: null
+      first_affected_birth_month: 1
+      pace_months_per_generation: null
+
+      pivot_age_months: null
+      behavioural_delay_share: 1.0
+
+      life_expectancy_indexation: false
+      lambda_ev: 0.6666666667
+
+      long_term_unemployment_rate: 0.07
+      absorption_rate: 1.0
+      relative_productivity: 1.0
