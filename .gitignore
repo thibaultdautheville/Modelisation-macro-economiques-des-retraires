@@ -1,0 +1,11 @@
+data/*.xlsx
+data/build_manifest.json
+data/processed/*
+!data/processed/.gitkeep
+outputs/*
+!outputs/.gitkeep
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.DS_Store
