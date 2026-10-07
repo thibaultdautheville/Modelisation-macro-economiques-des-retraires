@@ -1,0 +1,72 @@
+version: 1
+
+methodological_items:
+
+  liquidation_observed_2024:
+    label_fr: "Distribution observée des âges de liquidation"
+    category: "donnée observée"
+    status: "observed"
+    source: "CNAV 2024"
+    description_fr: >
+      Distribution des liquidations observées en 2024
+      par âge et sexe.
+    limitation_fr: >
+      Cette distribution reflète la législation applicable
+      aux générations observées en 2024 et ne constitue pas
+      directement une distribution de liquidation sous un
+      AOD stabilisé à 64 ans.
+
+  age_group_independence:
+    label_fr: "Ventilation âge × catégorie de départ"
+    category: "hypothèse de modélisation"
+    status: "provisional_calibration"
+    description_fr: >
+      En l'absence d'une distribution observée croisant
+      âge, sexe et catégorie de départ, les parts de catégories
+      sont appliquées par sexe aux distributions par âge.
+    assumption_fr: >
+      Indépendance entre l'âge de liquidation et la catégorie
+      de départ, conditionnellement au sexe.
+    limitation_fr: >
+      Cette hypothèse devra être remplacée ou validée à partir
+      de données CNAV/DREES plus détaillées.
+
+  reference_aod_reconstruction:
+    label_fr: "Reconstruction des liquidations sous AOD de référence à 64 ans"
+    category: "calibration"
+    status: "provisional_calibration"
+    description_fr: >
+      Les départs estimés de droit commun observés entre
+      62 et 63 ans sont repositionnés à 64 ans afin de construire
+      une distribution contrefactuelle compatible avec un AOD
+      stabilisé à 64 ans.
+    reference_aod_months: 768
+    observed_standard_age_floor_months: 744
+    limitation_fr: >
+      La méthode repose sur une reconstruction agrégée et non
+      sur des probabilités individuelles de liquidation.
+
+  aod_64_65_reference_exposure:
+    label_fr: "Population potentiellement exposée au passage de 64 à 65 ans"
+    category: "résultat de calibration"
+    status: "provisional_calibration"
+    value_persons: 231023
+    description_fr: >
+      Effectif de liquidations de droit commun potentiellement
+      exposées au relèvement de l'AOD de 64 à 65 ans après
+      reconstruction provisoire du scénario de référence.
+    previous_method_value_persons: 32174
+    previous_method_fr: >
+      Ancienne estimation fondée uniquement sur les liquidations
+      observées exactement à 64 ans en 2024.
+
+  institutional_benchmarks:
+    label_fr: "Benchmarks institutionnels COR"
+    category: "validation externe"
+    status: "benchmark"
+    description_fr: >
+      Les résultats COR / DG Trésor / I-MIP / OFCE servent
+      à contrôler les ordres de grandeur du modèle.
+    rule_fr: >
+      Les benchmarks ne sont pas utilisés comme coefficients
+      automatiques de recalage du modèle.

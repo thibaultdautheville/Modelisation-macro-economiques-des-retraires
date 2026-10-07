@@ -7,7 +7,7 @@ application:
   difference: "Écart à la référence"
   modelled: "Modélisé"
 
-  
+
 metrics:
   labour_force: "Population active"
   employment: "Emploi"
@@ -23,6 +23,11 @@ metrics:
   baseline_activity_rate: "Taux d'activité de référence"
   labour_force_baseline: "Population active de référence"
 
+  employment_baseline: "Emploi de référence"
+  unemployment_baseline: "Chômage de référence"
+  unemployment_rate_baseline: "Taux de chômage de référence"
+  inactive_baseline: "Population inactive de référence"
+  unemployment_calibration_factor: "Coefficient de recalage du chômage"
 
 units:
   persons: "personnes"
@@ -36,3 +41,10 @@ status:
   calibrated: "Calibré"
   user_defined: "Défini par l'utilisateur"
   to_calibrate: "À calibrer"
+
+
+methods:
+  observed_2025_age_group: "Profil observé en 2025 par tranche d'âge"
+  proxy_60_64_for_65_69: "Proxy 60-64 ans appliqué aux 65-69 ans"
+  cor_unemployment_calibration: "Recalage annuel sur la trajectoire de chômage du COR"
+  
