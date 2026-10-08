@@ -1,5 +1,5 @@
 from math import isfinite
-
+from datetime import date
 import pandas as pd
 
 from src.config import (
@@ -27,6 +27,10 @@ from src.retirement_groups import (
     compute_standard_aod_movable_exposure,
 )
 
+from src.transition_by_sex import (
+    select_transition_stock_by_sex,
+)
+
 from src.liquidation_reference import (
     build_reference_liquidation_distribution,
     aggregate_reference_distribution,
@@ -50,6 +54,7 @@ from src.reference_transition import (
     apply_reference_transition,
 )
 
+from src.transition_selector import select_transition_stock
 
 from src.pre_retirement_status import (
     build_pre_retirement_status_rates,
@@ -62,6 +67,7 @@ from src.labour_behaviour import (
     build_labour_effect_by_status,
 )
 
+from src.transition_by_sex import select_transition_stock_by_sex
 # Calibration provisoire :
 # âge plancher utilisé pour reconstruire la montée vers un AOD à 64 ans.
 REFERENCE_FLOOR_AOD_MONTHS = 744  # 62 ans
@@ -92,6 +98,8 @@ def run_aod_simulation(
     behavioural_delay_share: float = 1.0,
     absorption_rate: float = 1.0,
     steady_state_intensity: float = 144.0,
+    transition_method: str = "historique",
+    effective_date: date | None = None,
 ) -> dict[str, pd.DataFrame]:
     """
     Exécute la chaîne V1 d'un scénario de relèvement
@@ -221,8 +229,8 @@ def run_aod_simulation(
             "potential_exposed_share": 0.0,
         })
 
-    # ------------------------------------------------------------------
     # 3. Ancienne méthode :
+    # ------------------------------------------------------------------
     #    exposition observée à l'âge de référence
     #    Conservée uniquement comme diagnostic historique.
     # ------------------------------------------------------------------
@@ -282,8 +290,8 @@ def run_aod_simulation(
         )
     )
 
-    # ------------------------------------------------------------------
     # 5. Diagnostic annuel des liquidations déplacées
+    # ------------------------------------------------------------------
     # ------------------------------------------------------------------
 
     displaced_by_sex = (
@@ -360,24 +368,31 @@ def run_aod_simulation(
     annual_delayed_stock["delayed_person_years_transition_adjusted"] = (
         annual_delayed_stock["annual_average_delayed_stock_transition_adjusted"]
     )
+    # ---------------------------------------------------------
+    # 7 bis. Selection explicite de la methode de transition
+    # ---------------------------------------------------------
+    # Historique par defaut : maintien des anciens resultats.
+    # Les autres methodes restent experimentales.
 
-    # IMPORTANT :
-    # On conserve annual_delayed_stock intact afin de garder :
-    # - le stock brut ;
-    # - le facteur de maturité ;
-    # - le stock corrigé.
-    #
-    # On crée une copie spécifique pour le marché du travail.
-    labour_stock_input = (
-        annual_delayed_stock.copy()
+    transition_stock_selection = select_transition_stock(
+        cohort_calendar=cohort_calendar,
+        delayed_stock_detail=delayed_stock_detail,
+        annual_delayed_stock=annual_delayed_stock,
+        method=transition_method,
+        effective_date=effective_date,
     )
+
+    # Le stock historique demeure inchange dans
+    # annual_delayed_stock pour les audits.
+    # Seule la copie transmise au calcul d'emploi change.
+
+    labour_stock_input = transition_stock_selection.copy()
 
     labour_stock_input[
         "annual_average_delayed_stock"
     ] = labour_stock_input[
-        "annual_average_delayed_stock_transition_adjusted"
+        "selected_delayed_stock"
     ]
-
     # ------------------------------------------------------------------
     # 8. Effet sur le marché du travail
     # ------------------------------------------------------------------
@@ -401,18 +416,27 @@ def run_aod_simulation(
     # Les comportements restent provisoires et parametrables.
 
     annual_delayed_stock_by_sex = (
-        aggregate_annual_delayed_stock_by_sex(
-            delayed_stock_detail,
+        select_transition_stock_by_sex(
+            cohort_calendar=cohort_calendar,
+            delayed_stock_detail=delayed_stock_detail,
+            reference_transition=reference_transition,
+            transition_stock_selection=transition_stock_selection,
             start_year=START_YEAR,
             end_year=END_YEAR,
+            method=transition_method,
+            effective_date=effective_date,
         )
     )
 
-    annual_delayed_stock_by_sex = (
-        apply_reference_transition_by_sex(
-            annual_delayed_stock_by_sex,
-            reference_transition,
-        )
+    annual_delayed_stock_by_sex = select_transition_stock_by_sex(
+        cohort_calendar=cohort_calendar,
+        delayed_stock_detail=delayed_stock_detail,
+        reference_transition=reference_transition,
+        transition_stock_selection=transition_stock_selection,
+        start_year=START_YEAR,
+        end_year=END_YEAR,
+        method=transition_method,
+        effective_date=effective_date,
     )
 
     labour_status_2025 = pd.read_parquet(
@@ -495,6 +519,8 @@ def run_aod_simulation(
 
         "labour_behaviour_trajectory":
             labour_behaviour_trajectory,
+        "transition_stock_selection":
+            transition_stock_selection,
     }
 
 
