@@ -198,3 +198,65 @@ def test_reference_transition_is_applied(
         1.0
     )
 
+def test_behaviour_diagnostic_preserves_accounting(
+    benchmark_results,
+):
+    import pytest
+
+    results = benchmark_results
+
+    stock = results[
+        "annual_delayed_stock_by_sex"
+    ]
+
+    status = results[
+        "pre_retirement_status_stock"
+    ]
+
+    behaviour = results[
+        "labour_behaviour_trajectory"
+    ]
+
+    annual = results[
+        "annual_delayed_stock"
+    ]
+
+    # Le total ajuste par sexe doit correspondre
+    # au stock ajuste du moteur principal.
+    by_year = (
+        stock.groupby("year")[
+            "annual_average_delayed_stock_adjusted"
+        ]
+        .sum()
+    )
+
+    expected = annual.set_index("year")[
+        "annual_average_delayed_stock_transition_adjusted"
+    ]
+
+    assert by_year.sort_index().to_numpy() == pytest.approx(
+        expected.sort_index().to_numpy()
+    )
+
+    # Conservation de la ventilation par statut.
+    distributed = (
+        status["previously_employed"]
+        + status["previously_unemployed"]
+        + status["previously_inactive"]
+    )
+
+    assert distributed.to_numpy() == pytest.approx(
+        status[
+            "annual_average_delayed_stock_adjusted"
+        ].to_numpy()
+    )
+
+    # Identite comptable emploi / chomage / actifs.
+    assert behaviour[
+        "delta_labour_force_reform"
+    ].to_numpy() == pytest.approx(
+        (
+            behaviour["delta_employment_reform"]
+            + behaviour["delta_unemployment_reform"]
+        ).to_numpy()
+    )

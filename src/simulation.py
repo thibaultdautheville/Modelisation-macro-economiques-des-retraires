@@ -49,6 +49,17 @@ from src.reference_transition import (
 )
 
 
+from src.pre_retirement_status import (
+    build_pre_retirement_status_rates,
+)
+
+from src.labour_behaviour import (
+    aggregate_annual_delayed_stock_by_sex,
+    apply_reference_transition_by_sex,
+    build_status_stock,
+    build_labour_effect_by_status,
+)
+
 # Calibration provisoire :
 # âge plancher utilisé pour reconstruire la montée vers un AOD à 64 ans.
 REFERENCE_FLOOR_AOD_MONTHS = 744  # 62 ans
@@ -329,6 +340,55 @@ def run_aod_simulation(
         )
     )
 
+    # ---------------------------------------------------------
+    # Diagnostic complementaire du marche du travail
+    # ---------------------------------------------------------
+    # Cette branche ne remplace pas labour_trajectory.
+    # Les comportements restent provisoires et parametrables.
+
+    annual_delayed_stock_by_sex = (
+        aggregate_annual_delayed_stock_by_sex(
+            delayed_stock_detail,
+            start_year=START_YEAR,
+            end_year=END_YEAR,
+        )
+    )
+
+    annual_delayed_stock_by_sex = (
+        apply_reference_transition_by_sex(
+            annual_delayed_stock_by_sex,
+            reference_transition,
+        )
+    )
+
+    labour_status_2025 = pd.read_parquet(
+        PROCESSED_DIR / "labour_status_rates.parquet"
+    )
+
+    pre_retirement_rates = (
+        build_pre_retirement_status_rates(
+            labour_status_2025,
+            age_group="60-64",
+        )
+    )
+
+    pre_retirement_status_stock = build_status_stock(
+        annual_delayed_stock_by_sex,
+        pre_retirement_rates,
+    )
+
+    labour_behaviour_trajectory = (
+        build_labour_effect_by_status(
+            pre_retirement_status_stock,
+            employment_retention_rate=1.0,
+            unemployed_activity_retention_rate=1.0,
+            unemployed_job_entry_rate=0.0,
+            inactive_activation_rate=0.0,
+            inactive_employment_rate=0.0,
+        )
+    )
+
+
     return {
         "cohort_calendar":
             cohort_calendar,
@@ -373,6 +433,14 @@ def run_aod_simulation(
 
         "labour_trajectory":
             labour_trajectory,
+        "annual_delayed_stock_by_sex":
+            annual_delayed_stock_by_sex,
+
+        "pre_retirement_status_stock":
+            pre_retirement_status_stock,
+
+        "labour_behaviour_trajectory":
+            labour_behaviour_trajectory,
     }
 
 
