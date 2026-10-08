@@ -37,7 +37,7 @@ def test_simulation_returns_expected_blocks(
         "annual_delayed_stock",
         "observed_movable_reference",
         "reference_liquidation_detail",
-"reference_liquidation_distribution",
+        "reference_liquidation_distribution",
     }
 
 def test_steady_state_stock_matches_reference(
@@ -198,4 +198,3 @@ def test_reference_transition_is_applied(
         1.0
     )
 
-    
