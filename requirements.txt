@@ -5,6 +5,9 @@ pyarrow
 openpyxl
 PyYAML
 
+# Validation des configurations
+pydantic>=2,<3
+
 # Tests
 pytest
 

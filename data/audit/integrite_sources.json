@@ -1,0 +1,112 @@
+[
+  {
+    "path": "data/MASTER_DATA_RETRAITES_V1.xlsx",
+    "sha256": "47f238a978201005a6bdbc166374094609e620491fe7970bbc6ac957bdb89f46",
+    "bytes": 315882
+  },
+  {
+    "path": "data/processed/activity_rates.parquet",
+    "sha256": "4113089b27299459e35c6b145ee64c12094ed466520dfd7e7a1e720bc067e64b",
+    "bytes": 5393
+  },
+  {
+    "path": "data/processed/demography.parquet",
+    "sha256": "424e7dfdc54433e18eb87685c18188bfe918a339668b39783be4f0b89643ea81",
+    "bytes": 51867
+  },
+  {
+    "path": "data/processed/institutional_benchmarks.parquet",
+    "sha256": "8ea51c04bd7fb70ef8737c50cb1e08de4ced6628dd584a87aaf7b18b81d89ede",
+    "bytes": 4442
+  },
+  {
+    "path": "data/processed/labour_status_rates.parquet",
+    "sha256": "5bab2bc85546162ffbb50fc32162fa3f94bc8109e29a3608edc4ef1e2514ed9b",
+    "bytes": 9223
+  },
+  {
+    "path": "data/processed/legal_aod_dar.parquet",
+    "sha256": "45d4319ac9556eed7b04e0932515f96b18b4969c53d92b449211d5e2bfdd8de2",
+    "bytes": 6183
+  },
+  {
+    "path": "data/processed/legal_racl20.parquet",
+    "sha256": "93f36b63ea2b17a01738be497506104d2ae8d1dfdcffa800c28a013c312a03a5",
+    "bytes": 5033
+  },
+  {
+    "path": "data/processed/life_expectancy_65.parquet",
+    "sha256": "58884acc1906971a2e998bbb1fa979e4be40627b49dd063e850c31cee661849b",
+    "bytes": 3877
+  },
+  {
+    "path": "data/processed/liquidation_age_counts.parquet",
+    "sha256": "f9fea077616a365b2559933993ee8d3345cdda5c37d03ab41a7d43e036255a5b",
+    "bytes": 3809
+  },
+  {
+    "path": "data/processed/liquidation_groups.parquet",
+    "sha256": "03947c012b1446dd8e4f04391a3285820c39e889b8c13b090ee120fcc62dacf8",
+    "bytes": 5209
+  },
+  {
+    "path": "data/processed/macro_baseline.parquet",
+    "sha256": "1ad7ae682aa3dd57996eaff36889df998c6797c9cb519c2fcb359e3df3307c33",
+    "bytes": 11202
+  },
+  {
+    "path": "data/processed/retirement_baseline.parquet",
+    "sha256": "ea7767be9ef0313b6e666dadcc2f5917e421d22785fc00dbad682b6f18b4d97b",
+    "bytes": 10363
+  },
+  {
+    "path": "data/processed/retirement_sensitivity_productivity.parquet",
+    "sha256": "6c3e6c7ea4cb29a35e63b423a477af3b4efbb03db603bb2f35690677f20c7eda",
+    "bytes": 7451
+  },
+  {
+    "path": "data/processed/retirement_sensitivity_unemployment.parquet",
+    "sha256": "364e702425c01a7412daafc0c165c7f5c644bbe292c4917b05bfaae2521c71c9",
+    "bytes": 7443
+  },
+  {
+    "path": "data/sources/cor/Données_RA2026_P1.xlsx",
+    "sha256": "69a417b9e146447e82e4e7369f3e31d9f860f79e3a99d89f25e9e1fbc147b76a",
+    "bytes": 474303
+  },
+  {
+    "path": "data/sources/cor/Données_RA2026_P2.xlsx",
+    "sha256": "0a05bb83be269c72b7148f9b396a36aad73d9d2fc3cb210ef39f6d48d69e33f6",
+    "bytes": 736733
+  },
+  {
+    "path": "data/sources/drees/62 EACR diffusée Part 1 - version du 26 mai 2026.xlsx",
+    "sha256": "b286834e5da0dcc37888d68c8d41d1b3c76578db586c7f05072e8266c7fb3cbe",
+    "bytes": 24070107
+  },
+  {
+    "path": "data/sources/drees/62 EACR diffusée Part 2 - version du 26 mai 2026.xlsx",
+    "sha256": "d12f9f20c37ca4e5eedecb1f9607df23042d1140455ee35e3be16bbb057c2556",
+    "bytes": 15724957
+  },
+  {
+    "path": "data/sources/insee/00_central.xlsx",
+    "sha256": "93ab1daf7c7b41cfde39010b684f357cb13d8ca0f8a7a4c0b2d28882b4c37326",
+    "bytes": 2450989
+  },
+  {
+    "path": "data/sources/insee/EEC_CHOM01.xlsx",
+    "sha256": "a33c397b601456da9af4e24cddac499b33d5198dac3546cd5b73a229d19ccff1",
+    "bytes": 7221
+  },
+  {
+    "path": "data/sources/insee/EEC_PACT00.xlsx",
+    "sha256": "76fbf3a76ec90a9757fc14a2cb74fcd650e3092ab341c74e3c3ba69f24b50676",
+    "bytes": 7208
+  },
+  {
+    "path": "data/sources/insee/EEC_PEMP01.xlsx",
+    "sha256": "2ccb05287cd1bd7fad4bd8e50835e402fb3e9b7a69f6550d850b37eec6efeefb",
+    "bytes": 7208
+  }
+]

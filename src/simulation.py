@@ -1,3 +1,5 @@
+from math import isfinite
+
 import pandas as pd
 
 from src.config import (
@@ -125,6 +127,16 @@ def run_aod_simulation(
             "que les relèvements de l'AOD."
         )
 
+    for value, name in ((behavioural_delay_share, "behavioural_delay_share"),
+                        (absorption_rate, "absorption_rate")):
+        if not isfinite(value) or not 0 <= value <= 1:
+            raise ValueError(f"{name} doit etre fini et compris entre 0 et 1.")
+    if not isfinite(steady_state_intensity) or steady_state_intensity <= 0:
+        raise ValueError("L'intensite de reference doit etre finie et positive.")
+    for value in (baseline_aod_months, reform_aod_months):
+        if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+            raise ValueError("Les AOD doivent etre des entiers positifs en mois.")
+
     inputs = load_simulation_inputs()
 
     scenario = load_scenario_config(
@@ -142,6 +154,24 @@ def run_aod_simulation(
         )
     )
 
+    if scenario.life_expectancy_indexation or scenario.pivot_age_months is not None:
+        raise NotImplementedError("Pivot et indexation EV ne sont pas encore implementes dans ce moteur AOD.")
+
+    calendar_changes = cohort_calendar["delta_aod_months"].ne(0).any()
+    if reform_aod_months == baseline_aod_months and calendar_changes:
+        raise ValueError(
+            "AOD de calibration identiques mais scenario juridique non neutre. "
+            "Pour le statu quo, utiliser scenario_id='statu_quo' avec 768, 768."
+        )
+    if reform_aod_months != baseline_aod_months and not calendar_changes:
+        raise ValueError("Le calendrier est neutre mais les AOD de calibration different.")
+    if (cohort_calendar["delta_aod_months"] < 0).any():
+        raise NotImplementedError("Les baisses d'AOD ne sont pas implementees dans ce moteur.")
+    if scenario.pace_months_per_generation in (None, 0) and scenario.aod_target_months is None:
+        if reform_aod_months - baseline_aod_months != scenario.aod_shift_months:
+            raise ValueError("Le decalage de calibration differe du decalage du scenario juridique.")
+    neutral = not calendar_changes
+
     monthly_delay = (
         expand_delay_to_calendar_months(
             cohort_calendar
@@ -153,6 +183,12 @@ def run_aod_simulation(
             monthly_delay
         )
     )
+
+    if neutral:
+        annual_delay = pd.DataFrame({
+            "year": range(START_YEAR, END_YEAR + 1),
+            "cohort_months_delayed": 0,
+        })
 
     # ------------------------------------------------------------------
     # 2. Distribution observée des âges de liquidation
@@ -177,6 +213,13 @@ def run_aod_simulation(
             reform_aod_months,
         )
     )
+
+    if neutral:
+        gross_exposure = pd.DataFrame({
+            "sex": sorted(age_distribution["sex"].unique()),
+            "potential_exposed_effectifs": 0.0,
+            "potential_exposed_share": 0.0,
+        })
 
     # ------------------------------------------------------------------
     # 3. Ancienne méthode :
@@ -288,23 +331,34 @@ def run_aod_simulation(
     # 7. Montée en charge du scénario de référence vers l'AOD cible
     # ------------------------------------------------------------------
 
-    reference_transition = (
-        build_reference_aod_transition(
-            inputs["legal"],
-            floor_aod_months=(
-                REFERENCE_FLOOR_AOD_MONTHS
-            ),
-            target_aod_months=(
-                baseline_aod_months
-            ),
+    if neutral and baseline_aod_months <= REFERENCE_FLOOR_AOD_MONTHS:
+        reference_transition = pd.DataFrame({
+            "year": range(START_YEAR, END_YEAR + 1),
+            "reference_maturity_factor": 1.0,
+            "transition_method": "neutral_no_adjustment",
+            "calibration_status": "neutral",
+        })
+    else:
+        reference_transition = (
+            build_reference_aod_transition(
+                inputs["legal"],
+                floor_aod_months=(
+                    REFERENCE_FLOOR_AOD_MONTHS
+                ),
+                target_aod_months=(
+                    baseline_aod_months
+                ),
+            )
         )
-    )
-
     annual_delayed_stock = (
         apply_reference_transition(
             annual_delayed_stock,
             reference_transition,
         )
+    )
+
+    annual_delayed_stock["delayed_person_years_transition_adjusted"] = (
+        annual_delayed_stock["annual_average_delayed_stock_transition_adjusted"]
     )
 
     # IMPORTANT :
@@ -495,18 +549,15 @@ def get_simulation_summary(
         "annual_average_delayed_stock_transition_adjusted",
         "maximum_monthly_delayed_stock",
         "delayed_person_years",
+        "delayed_person_years_transition_adjusted",
         "delta_labour_force_reform",
         "delta_employment_reform",
         "delta_unemployment_reform",
     ]
 
-    available = [
-        column
-        for column in columns
-        if column in summary.columns
-    ]
-
-    return (
-        summary[available]
-        .reset_index(drop=True)
-    )
+    missing = set(columns) - set(summary.columns)
+    if missing:
+        raise ValueError(f"Colonnes de synthese manquantes : {sorted(missing)}")
+    if start_year > end_year:
+        raise ValueError("Horizon de synthese inverse.")
+    return summary[columns].sort_values("year").reset_index(drop=True)

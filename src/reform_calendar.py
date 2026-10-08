@@ -163,7 +163,13 @@ def expand_delay_to_calendar_months(
                 }
             )
 
-    return pd.DataFrame(rows)
+    return pd.DataFrame(rows, columns=[
+        "birth_year", "birth_month", "calendar_year", "calendar_month",
+        "delay_month_number",
+    ]).astype({
+        "birth_year": "int64", "birth_month": "int64", "calendar_year": "int64",
+        "calendar_month": "int64", "delay_month_number": "int64",
+    })
 
 
 def aggregate_delay_by_year(

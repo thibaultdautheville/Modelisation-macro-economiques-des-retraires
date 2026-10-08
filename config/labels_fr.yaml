@@ -1,50 +1,48 @@
 locale: fr
-
 application:
-  title: "Simulateur de réformes des retraites"
-  baseline: "Scénario de référence"
-  reform: "Scénario réformé"
-  difference: "Écart à la référence"
-  modelled: "Modélisé"
-
-
+  title: Simulateur de réformes des retraites
+  baseline: Scénario de référence
+  reform: Scénario réformé
+  difference: Écart à la référence
+  modelled: Modélisé
 metrics:
-  labour_force: "Population active"
-  employment: "Emploi"
-  unemployment: "Chômage"
-  unemployment_rate: "Taux de chômage"
-  inactive_population: "Population inactive"
-
-  delta_labour_force: "Effet sur la population active"
-  delta_employment: "Effet sur l'emploi"
-  delta_unemployment: "Effet sur le chômage"
-
-  activity_rate: "Taux d'activité"
-  baseline_activity_rate: "Taux d'activité de référence"
-  labour_force_baseline: "Population active de référence"
-
-  employment_baseline: "Emploi de référence"
-  unemployment_baseline: "Chômage de référence"
-  unemployment_rate_baseline: "Taux de chômage de référence"
-  inactive_baseline: "Population inactive de référence"
-  unemployment_calibration_factor: "Coefficient de recalage du chômage"
-
+  labour_force: Population active
+  employment: Emploi
+  unemployment: Chômage
+  unemployment_rate: Taux de chômage
+  inactive_population: Population inactive
+  delta_labour_force: Effet sur la population active
+  delta_employment: Effet sur l'emploi
+  delta_unemployment: Effet sur le chômage
+  activity_rate: Taux d'activité
+  baseline_activity_rate: Taux d'activité de référence
+  labour_force_baseline: Population active de référence
+  employment_baseline: Emploi de référence
+  unemployment_baseline: Chômage de référence
+  unemployment_rate_baseline: Taux de chômage de référence
+  inactive_baseline: Population inactive de référence
+  unemployment_calibration_factor: Coefficient de recalage du chômage
+  annual_average_delayed_stock: Stock annuel moyen avant transition
+  annual_average_delayed_stock_transition_adjusted: Stock annuel moyen après transition
+  delayed_person_years: Personnes-années avant transition
+  delayed_person_years_transition_adjusted: Personnes-années après transition
 units:
-  persons: "personnes"
-  thousands_persons: "milliers de personnes"
-  percent: "%"
-  percentage_points: "points de pourcentage"
-
+  persons: personnes
+  thousands_persons: milliers de personnes
+  percent: '%'
+  percentage_points: points de pourcentage
 status:
-  observed: "Observé"
-  institutional: "Institutionnel"
-  calibrated: "Calibré"
-  user_defined: "Défini par l'utilisateur"
-  to_calibrate: "À calibrer"
-
-
+  observed: Observé
+  institutional: Institutionnel
+  calibrated: Calibré
+  user_defined: Défini par l'utilisateur
+  to_calibrate: À calibrer
+  observed_not_active: Observé, non utilisé dans le calcul
+  provisional_calibration: Calibration provisoire
+  audited_local_files: Concordance avec les fichiers fournis
+  to_resolve: À traiter
+  neutral: Sans nouvelle réforme
 methods:
-  observed_2025_age_group: "Profil observé en 2025 par tranche d'âge"
-  proxy_60_64_for_65_69: "Proxy 60-64 ans appliqué aux 65-69 ans"
-  cor_unemployment_calibration: "Recalage annuel sur la trajectoire de chômage du COR"
-  
+  observed_2025_age_group: Profil observé en 2025 par tranche d'âge
+  proxy_60_64_for_65_69: Proxy 60-64 ans appliqué aux 65-69 ans
+  cor_unemployment_calibration: Recalage annuel sur la trajectoire de chômage du COR

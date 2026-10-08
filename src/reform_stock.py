@@ -156,7 +156,14 @@ def build_monthly_delayed_stock(
                     }
                 )
 
-    return pd.DataFrame(rows)
+    return pd.DataFrame(rows, columns=[
+        "birth_year", "birth_month", "sex", "calendar_year", "calendar_month",
+        "delay_month_number", "delayed_stock_persons",
+    ]).astype({
+        "birth_year": "int64", "birth_month": "int64", "calendar_year": "int64",
+        "calendar_month": "int64", "delay_month_number": "int64",
+        "delayed_stock_persons": "float64",
+    })
 
 
 def aggregate_monthly_stock(
@@ -258,6 +265,17 @@ def aggregate_annual_stock(
         raise ValueError(
             f"Colonnes manquantes : {sorted(missing)}"
         )
+
+    if start_year is not None and end_year is not None and start_year > end_year:
+        raise ValueError("L'annee de debut doit preceder l'annee de fin.")
+
+    if monthly_stock.empty and start_year is not None and end_year is not None:
+        return pd.DataFrame({
+            "year": range(start_year, end_year + 1),
+            "annual_average_delayed_stock": 0.0,
+            "maximum_monthly_delayed_stock": 0.0,
+            "delayed_person_years": 0.0,
+        })
 
     if monthly_stock.empty:
         return pd.DataFrame(

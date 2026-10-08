@@ -298,9 +298,9 @@ def compute_reference_aod_exposure(
         reform_aod_months
     )
 
-    if reform_age <= baseline_age:
+    if reform_age < baseline_age:
         raise ValueError(
-            "L'AOD réformé doit être supérieur "
+            "L'AOD reforme doit etre superieur ou egal "
             "à l'AOD de référence."
         )
 
@@ -320,6 +320,15 @@ def compute_reference_aod_exposure(
         raise ValueError(
             f"Colonnes manquantes : {sorted(missing)}"
         )
+
+    if reform_age == baseline_age:
+        sexes = sorted(set(reference_distribution["sex"]) & {"F", "H"})
+        return pd.DataFrame({
+            "sex": sexes,
+            "movable_exposed_effectifs": 0.0,
+            "calibration_status": "neutral",
+            "exposure_method": "no_aod_change",
+        })
 
     exposed = reference_distribution.loc[
         (

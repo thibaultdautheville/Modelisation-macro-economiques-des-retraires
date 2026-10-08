@@ -1,0 +1,18 @@
+﻿id;formule;unite;module;statut;limite_source
+E01;PA0(a,s,t)=N(a,s,t)*taux_activite0(a,s,t);personnes;activity.py;Actif;"INSEE + ancrages COR; profil uniforme dans chaque tranche"
+E02;"E0=PA0-U0 ; I0=N-PA0";personnes;labour_baseline.py;Actif;"Identites; perimetre 15-69 ans"
+E03;u(a,s,t)=u2025(a,s)*cibleCOR(t)/moyenne_ponderee(t);proportion;labour_baseline.py;Actif, hypothese;Recalage, pas projection COR par age
+E04;AgeReforme(c)=AgeReference(c)+decalage, borne par cible;mois;legal.py;Actif partiel;Progression supplementaire a une baseline variable
+E05;n_estime(a,s,k)=n(a,s)*part(k|s);personnes;liquidation_reference.py;Actif provisoire;"Independance age/categorie; croisement observe non encore branche"
+E06;AgeReference=64 pour les droits communs estimes de 62-63 ans;annees;liquidation_reference.py;Actif provisoire;Concentration contrefactuelle non observee
+E07;Stock(c,s,m)=M(s)/12 * indicatrice(date0 <= m < date1);personnes;reform_stock.py;Actif provisoire;"Sorties explicites; calibration annuelle fixe"
+E08;Stock_moyen(t)=somme_m Stocks(m)/12;personnes;reform_stock.py;"Actif; neutralite corrigee";Une annee vide vaut zero sur douze mois
+E09;theta(t)=moyenne_c clip((AOD(c)-744)/24,0,1);sans unite;reference_transition.py;Actif provisoire;Pas une probabilite observee de liquidation
+E10;Stock_ajuste(t)=theta(t)*Stock_moyen(t);personnes;simulation.py;Actif provisoire;"Brut et ajuste conserves; personnes-annees ajustees explicites"
+E11;"DeltaPA=beta*S ; DeltaE=alpha*DeltaPA ; DeltaU=DeltaPA-DeltaE";personnes;reform_stock.py;Branche principale;Coefficients statiques, non vitesse dynamique
+E12;"DeltaE=rE*ZE+jU*ZU+aI*eI*ZI ; DeltaPA=rE*ZE+rU*ZU+aI*ZI";personnes;labour_behaviour.py;Diagnostic parallele;"rE=1,rU=1,jU=0,aI=0,eI=0; Z provisoires 60-64 ans"
+E13;DeltaU=DeltaPA-DeltaE;personnes;labour_behaviour.py;Identite testee;Pas une variation du taux de chomage
+E14;Scenario neutre ET ages identiques => tous les deltas = 0;personnes;simulation.py;Corrige et teste;Preset +1 et ages identiques refuses
+E15;Effectif_joint(a,s,k)=somme des motifs exclusifs DREES regroupes;personnes;scripts/audit_sources.py;"Observe regroupe; NON actif";"CNAV2024 CC0015 Flux Taux Ensemble; >70 conserve"
+E16;DeltaPIB/PIB0=rho*DeltaE/E0;proportion;macro.py a developper;Prevu au cahier;Aucun PIB calcule par ce lot
+E17;DeltaSoldeAPU=DeltaSoldeRet+0.53*DeltaPIB-DeltaCotRet-DeltaAutresPrestations;euros coherents;public_finance.py a developper;Prevu au cahier;Pensions, cotisations, nouveaux droits et couts a definir

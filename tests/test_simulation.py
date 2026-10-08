@@ -40,6 +40,9 @@ def test_simulation_returns_expected_blocks(
         "reference_liquidation_distribution",
     }
 
+    assert expected.issubset(benchmark_results)
+
+
 def test_steady_state_stock_matches_reference(
     benchmark_results,
 ):

@@ -1,72 +1,123 @@
-version: 1
-
+version: 2
 methodological_items:
-
   liquidation_observed_2024:
-    label_fr: "Distribution observée des âges de liquidation"
-    category: "donnée observée"
-    status: "observed"
-    source: "CNAV 2024"
-    description_fr: >
-      Distribution des liquidations observées en 2024
-      par âge et sexe.
-    limitation_fr: >
-      Cette distribution reflète la législation applicable
-      aux générations observées en 2024 et ne constitue pas
-      directement une distribution de liquidation sous un
-      AOD stabilisé à 64 ans.
+    label_fr: Distribution observée des âges de liquidation
+    category: donnée observée
+    status: observed
+    source: CNAV 2024
+    description_fr: 'Distribution des liquidations observées en 2024 par âge et sexe.
 
+      '
+    limitation_fr: 'Cette distribution reflète la législation applicable aux générations observées en 2024
+      et ne constitue pas directement une distribution de liquidation sous un AOD stabilisé à 64 ans.
+
+      '
   age_group_independence:
-    label_fr: "Ventilation âge × catégorie de départ"
-    category: "hypothèse de modélisation"
-    status: "provisional_calibration"
-    description_fr: >
-      En l'absence d'une distribution observée croisant
-      âge, sexe et catégorie de départ, les parts de catégories
-      sont appliquées par sexe aux distributions par âge.
-    assumption_fr: >
-      Indépendance entre l'âge de liquidation et la catégorie
-      de départ, conditionnellement au sexe.
-    limitation_fr: >
-      Cette hypothèse devra être remplacée ou validée à partir
-      de données CNAV/DREES plus détaillées.
+    label_fr: Ventilation âge × catégorie de départ
+    category: hypothèse de modélisation
+    status: provisional_calibration
+    description_fr: 'En l''absence d''une distribution observée croisant âge, sexe et catégorie de départ,
+      les parts de catégories sont appliquées par sexe aux distributions par âge.
 
+      '
+    assumption_fr: 'Indépendance entre l''âge de liquidation et la catégorie de départ, conditionnellement
+      au sexe.
+
+      '
+    limitation_fr: Le croisement CNAV 2024 age x sexe x groupe existe dans H-Conditions_liq du fichier DREES
+      fourni. Il est extrait dans data/derived/cnav_age_group_2024.csv, mais reste inactif dans le moteur dans
+      ce lot.
   reference_aod_reconstruction:
-    label_fr: "Reconstruction des liquidations sous AOD de référence à 64 ans"
-    category: "calibration"
-    status: "provisional_calibration"
-    description_fr: >
-      Les départs estimés de droit commun observés entre
-      62 et 63 ans sont repositionnés à 64 ans afin de construire
-      une distribution contrefactuelle compatible avec un AOD
-      stabilisé à 64 ans.
+    label_fr: Reconstruction des liquidations sous AOD de référence à 64 ans
+    category: calibration
+    status: provisional_calibration
+    description_fr: 'Les départs estimés de droit commun observés entre 62 et 63 ans sont repositionnés à 64
+      ans afin de construire une distribution contrefactuelle compatible avec un AOD stabilisé à 64 ans.
+
+      '
     reference_aod_months: 768
     observed_standard_age_floor_months: 744
-    limitation_fr: >
-      La méthode repose sur une reconstruction agrégée et non
-      sur des probabilités individuelles de liquidation.
+    limitation_fr: 'La méthode repose sur une reconstruction agrégée et non sur des probabilités individuelles
+      de liquidation.
 
+      '
   aod_64_65_reference_exposure:
-    label_fr: "Population potentiellement exposée au passage de 64 à 65 ans"
-    category: "résultat de calibration"
-    status: "provisional_calibration"
+    label_fr: Population potentiellement exposée au passage de 64 à 65 ans
+    category: résultat de calibration
+    status: provisional_calibration
     value_persons: 231023
-    description_fr: >
-      Effectif de liquidations de droit commun potentiellement
-      exposées au relèvement de l'AOD de 64 à 65 ans après
-      reconstruction provisoire du scénario de référence.
-    previous_method_value_persons: 32174
-    previous_method_fr: >
-      Ancienne estimation fondée uniquement sur les liquidations
-      observées exactement à 64 ans en 2024.
+    description_fr: 'Effectif de liquidations de droit commun potentiellement exposées au relèvement de l''AOD
+      de 64 à 65 ans après reconstruction provisoire du scénario de référence.
 
+      '
+    previous_method_value_persons: 32174
+    previous_method_fr: 'Ancienne estimation fondée uniquement sur les liquidations observées exactement à
+      64 ans en 2024.
+
+      '
   institutional_benchmarks:
-    label_fr: "Benchmarks institutionnels COR"
-    category: "validation externe"
-    status: "benchmark"
-    description_fr: >
-      Les résultats COR / DG Trésor / I-MIP / OFCE servent
-      à contrôler les ordres de grandeur du modèle.
-    rule_fr: >
-      Les benchmarks ne sont pas utilisés comme coefficients
-      automatiques de recalage du modèle.
+    label_fr: Benchmarks institutionnels COR
+    category: validation externe
+    status: benchmark
+    description_fr: 'Les résultats COR / DG Trésor / I-MIP / OFCE servent à contrôler les ordres de grandeur
+      du modèle.
+
+      '
+    rule_fr: Les benchmarks ne sont pas utilisés comme coefficients automatiques de recalage du modèle.
+    limitation_fr: Des choix du prototype ont ete ajustes apres examen des benchmarks. Etre dans leur fourchette
+      n est donc pas une validation independante; le milieu de fourchette n est pas une cible officielle.
+  source_concordance:
+    label_fr: Concordance des sources et des tables
+    category: audit
+    status: audited_local_files
+    description_fr: 13 Parquet compares au MASTER; 57 091 comparaisons de valeurs sur 80 controles, sans ecart
+      hors tolerances.
+    limitation_fr: Copie conforme ne signifie pas modele valide. ECRT2023-E2 manque; metadonnees Fig 2.4 a
+      verifier.
+  neutral_scenario:
+    label_fr: Scenario sans nouvelle reforme
+    category: identite comptable
+    status: implemented
+    description_fr: statu_quo avec AOD de calibration identiques produit 45 annees completes et des deltas
+      nuls.
+    limitation_fr: Le preset benchmark_aod_plus_1 avec deux AOD identiques reste incoherent et est refuse.
+  cnav_joint_observed:
+    label_fr: Distribution CNAV croisee 2024
+    category: donnee observee regroupee
+    status: observed_not_active
+    description_fr: 'H-Conditions_liq : CNAV, CC0015, flux 2024, Taux Ensemble, neuf motifs exclusifs; marges
+      controlees.'
+    limitation_fr: Ni projection de futurs liquidants, ni hazard conditionnel, ni statut juste avant retraite.
+  open_age_class:
+    label_fr: Liquidants de plus de 70 ans
+    category: controle de perimetre
+    status: to_resolve
+    description_fr: 15 581 liquidants F/H dans >70, elimines du groupby(age_numeric) du prototype.
+    limitation_fr: Correction future des normalisations; ne pas assimiler >70 a exactement 70 ans.
+  reference_transition:
+    label_fr: Facteur de transition vers 64 ans
+    category: hypothese de modelisation
+    status: provisional_calibration
+    description_fr: Moyenne par annee d eligibilite de clip((AOD-744)/24,0,1), appliquee au stock annuel.
+    limitation_fr: Pas une equation institutionnelle. Risque de double prise en compte de la transition; maintenue
+      pour non-regression.
+  status_proxy_60_64:
+    label_fr: Proxy du statut avant liquidation
+    category: hypothese de modelisation
+    status: provisional_calibration
+    description_fr: Ventilation F/H des 60-64 ans en 2025; diagnostic conserve en parallele.
+    limitation_fr: La population de 60-64 ans inclut des retraites; ce ne sont pas les statuts individuels
+      des liquidants.
+  person_years_adjusted:
+    label_fr: Personnes-annees apres transition
+    category: identite comptable
+    status: implemented
+    description_fr: Somme des stocks mensuels / 12; colonne ajustee distincte de la colonne brute.
+    limitation_fr: Aucune nouvelle pension calculee; ne pas melanger stocks bruts et ajustes.
+  legal_entry_date:
+    label_fr: Date d effet de la reforme
+    category: parametre juridique
+    status: to_resolve
+    description_fr: Le calendrier est applique a toutes les generations; le benchmark demarre en 2022.
+    limitation_fr: Le filtre d affichage 2026-2070 ne definit pas la date d entree en vigueur.
+last_audit: '2026-10-08'
