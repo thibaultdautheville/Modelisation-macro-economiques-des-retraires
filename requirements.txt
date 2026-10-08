@@ -1,0 +1,14 @@
+# Donnees et calculs
+pandas
+numpy
+pyarrow
+openpyxl
+PyYAML
+
+# Tests
+pytest
+
+# Interface et export (developpement futur)
+streamlit
+plotly
+xlsxwriter
